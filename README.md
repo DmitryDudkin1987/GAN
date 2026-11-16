@@ -18,28 +18,24 @@
 Инструкция подходит для Linux, macOS и Windows. Примеры команд даны для терминала Linux/macOS.
 
 1. Клонирование репозитория и переход в папку:
-    ```
    git clone https://github.com/DmitryDudkin1987/GAN.git
    cd GAN
-```
-3. Создание и активация виртуального окружения:
-```
-python3 -m venv .venv
+   
+2. Создание и активация виртуального окружения:
+
+   python3 -m venv .venv
    source .venv/bin/activate      # Для Windows: .venv\Scripts\activate
-```
+   
    ВАЖНО (Ubuntu/Debian): Если при создании окружения возникает ошибка "ensurepip is not available", установите пакет:
    sudo apt update && sudo apt install python3-venv
    После установки удалите старую папку (rm -rf .venv) и повторите шаг 2.
 
 4. Установка зависимостей:
+   
    pip install --upgrade pip
    pip install -r requirements.txt
 
-5. Подготовка файлов конфигурации:
-   В текущей версии репозитория файл конфигурации может называться config.txt. Для корректного импорта в Python его обязательно нужно переименовать:
-   mv config.txt config.py         # Для Windows: ren config.txt config.py
-
-6. Запуск обучения:
+5. Запуск обучения:
    python train.py --epoch 10
 
 ## Аргументы командной строки
