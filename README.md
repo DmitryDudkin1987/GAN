@@ -4,7 +4,7 @@
 Обучение на PyTorch Lightning, логирование экспериментов — в ClearML.
 
 ## Структура
-
+```
 .
 ├── config.py       # CLI и гиперпараметры
 ├── data.py         # MNISTDataModule
@@ -12,7 +12,7 @@
 ├── train.py        # точка входа + инициализация ClearML
 ├── requirements.txt
 └── README.md
-
+```
 ## Установка и запуск (Quick Start)
 
 Инструкция подходит для Linux, macOS и Windows. Примеры команд даны для терминала Linux/macOS.
