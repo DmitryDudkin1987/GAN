@@ -3,46 +3,77 @@
 Учебный проект: генеративно-состязательная сеть (DCGAN) для генерации цифр MNIST.
 Обучение на PyTorch Lightning, логирование экспериментов — в ClearML.
 
-## Структура
+## Структура проекта
 
-```
 .
-├── config.py       # CLI, гиперпараметры, инициализация ClearML
+├── config.py       # CLI и гиперпараметры
 ├── data.py         # MNISTDataModule
 ├── models.py       # Generator, Discriminator, GAN(LightningModule)
-├── train.py        # точка входа
+├── train.py        # точка входа + инициализация ClearML
 ├── requirements.txt
-├── .env.example
 └── README.md
-```
 
-## Установка
+## Установка и запуск (Quick Start)
 
-```bash
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
+Инструкция подходит для Linux, macOS и Windows. Примеры команд даны для терминала Linux/macOS.
+
+### 1. Клонирование репозитория и переход в папку
+
+git clone https://github.com/DmitryDudkin1987/GAN.git
+cd GAN
+
+(Если у вас нет git, скачайте архив с GitHub через кнопку Code -> Download ZIP, распакуйте и перейдите в папку через cd путь/к/папке/GAN).
+
+### 2. Создание и активация виртуального окружения
+
+Рекомендуется использовать изолированное окружение:
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+(Для Windows: .venv\Scripts\activate)
+
+ВАЖНО (Ubuntu/Debian): Если при создании окружения вы видите ошибку "ensurepip is not available", установите системный пакет:
+sudo apt update && sudo apt install python3-venv
+После установки удалите старую папку (rm -rf .venv) и повторите шаг 2.
+
+### 3. Установка зависимостей
+
+Обновите pip и установите необходимые библиотеки:
+
+pip install --upgrade pip
 pip install -r requirements.txt
-```
 
-## Настройка ClearML
+### 4. Подготовка файлов конфигурации
 
-Скопируйте пример окружения и заполните ключи:
+В текущей версии репозитория файл конфигурации может называться config.txt. Для корректного импорта в Python его ОБЯЗАТЕЛЬНО нужно переименовать:
 
-```bash
-cp .env.example .env
-# отредактируйте .env своими CLEARML_API_ACCESS_KEY / SECRET
-```
+mv config.txt config.py
 
-Реальный `.env` в git не коммитится (см. `.gitignore`).
+(Для Windows: ren config.txt config.py)
 
-## Запуск
+Если вы видите в папке уже config.py, этот шаг можно пропустить.
 
-```bash
-python train.py --epoch 10 --debug_samples_epoch 1
-```
+ПРИМЕЧАНИЕ ПО CLEARML: В train.py захардкожены ключи для учебного сервера ClearML. Если сервер недоступен, обучение может зависнуть на этапе инициализации. В таком случае временно закомментируйте блок с os.environ[...] и Task.init(...) в train.py.
 
-Артефакты:
+### 5. Запуск обучения
 
-- `checkpoints/` — чекпоинты (`ModelCheckpoint`, топ-3 по `Loss_G`)
-- `output/` — сгенерированные изображения по эпохам
-- ClearML-проект `My_Homework` / таск `Unit_3` — скаляры лоссов, сэмплы, чекпоинты
+Запустите скрипт обучения. По умолчанию модель будет обучаться 10 эпох:
+
+python train.py --epoch 10
+
+Доступные аргументы командной строки:
+--epoch              : Количество эпох обучения (по умолчанию 10)
+--debug_samples_epoch: Как часто сохранять сгенерированные картинки (по умолчанию 1)
+
+Пример запуска с другими параметрами:
+
+python train.py --epoch 25 --debug_samples_epoch 5
+
+### 6. Результаты
+
+После запуска в корневой папке проекта появятся:
+- data/               : скачанный датасет MNIST (загружается автоматически при первом запуске);
+- checkpoints/        : сохраненные веса модели (лучшие 3 чекпоинта по Loss_G);
+- output/             : PNG-файлы со сгенерированными цифрами после каждой эпохи;
+- lightning_logs/     : логи PyTorch Lightning.
